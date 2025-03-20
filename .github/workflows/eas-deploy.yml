@@ -1,15 +1,17 @@
-name: EAS Deploy
+name: EAS Build and Deploy
 
+# This workflow builds and deploys the app using EAS
 on:
   push:
-    branches:
-      - main
-      - develop
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  deploy:
-    name: Deploy to EAS
+  build:
+    name: Build and Deploy
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -28,16 +30,13 @@ jobs:
 
       - name: Configure EAS
         run: |
-          eas configure --non-interactive
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          eas login --non-interactive --token ${{ secrets.EAS_TOKEN }}
 
-      - name: Build with EAS
-        run: |
-          if [ ${{ github.ref }} = 'refs/heads/main' ]; then
-            eas build --platform all --channel production --non-interactive
-          else
-            eas build --platform all --channel development --non-interactive
-          fi
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }} 
+      - name: Build for Android
+        run: eas build --platform android --profile development --non-interactive
+
+      - name: Build for iOS
+        run: eas build --platform ios --profile development --non-interactive
+
+      - name: Deploy Update
+        run: eas update --channel development --message "Automated update from GitHub Actions" --non-interactive 
