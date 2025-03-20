@@ -1,14 +1,28 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Alert, Platform, Linking } from 'react-native';
 
-export default function App() {
-  const handlePress = async () => {
-    const phoneNumber = '917-605-5448';
+interface Styles {
+  container: {
+    flex: number;
+    backgroundColor: string;
+    alignItems: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline';
+    justifyContent: 'center' | 'flex-start' | 'flex-end' | 'space-around' | 'space-between' | 'space-evenly';
+    gap: number;
+  };
+  text: {
+    fontSize: number;
+    marginBottom: number;
+  };
+}
+
+export default function App(): JSX.Element {
+  const handlePress = async (): Promise<void> => {
+    const phoneNumber: string = '917-605-5448';
     
     if (Platform.OS === 'ios') {
       try {
-        const facetimeUrl = `facetime://${phoneNumber}`;
-        const supported = await Linking.canOpenURL(facetimeUrl);
+        const facetimeUrl: string = `facetime://${phoneNumber}`;
+        const supported: boolean = await Linking.canOpenURL(facetimeUrl);
         
         if (supported) {
           await Linking.openURL(facetimeUrl);
@@ -37,7 +51,7 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles: Styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -49,4 +63,4 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
   },
-});
+}); 
