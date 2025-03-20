@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - dev
+      - develop
 
 jobs:
   deploy:
@@ -32,14 +32,12 @@ jobs:
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Build and submit to EAS
+      - name: Build with EAS
         run: |
           if [ ${{ github.ref }} = 'refs/heads/main' ]; then
             eas build --platform all --channel production --non-interactive
-            eas submit --platform all --channel production --non-interactive
           else
             eas build --platform all --channel development --non-interactive
-            eas submit --platform all --channel development --non-interactive
           fi
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }} 
