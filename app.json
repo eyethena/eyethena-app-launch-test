@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.geoffscott.eyethenaapplaunchtest",
+      "bundleIdentifier": "com.eyethena.applaunchtest",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -24,22 +24,23 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.geoffscott.eyethenaapplaunchtest"
+      "package": "com.eyethena.applaunchtest"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "organization": "eyethena",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/5c6f547a-b7f4-41cc-bc00-14edede33a46"
     },
     "extra": {
       "eas": {
         "projectId": "5c6f547a-b7f4-41cc-bc00-14edede33a46"
       }
     },
-    "owner": "geoffscott",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/5c6f547a-b7f4-41cc-bc00-14edede33a46"
-    }
+    "owner": "eyethena"
   }
 }

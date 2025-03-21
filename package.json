@@ -1,5 +1,5 @@
 {
-  "name": "eyethena-app-launch-test",
+  "name": "@eyethena/app-launch-test",
   "version": "1.0.0",
   "main": "index.tsx",
   "scripts": {
