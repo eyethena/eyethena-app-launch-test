@@ -33,10 +33,10 @@ jobs:
           eas login --non-interactive --token ${{ secrets.EAS_TOKEN }}
 
       - name: Build for Android
-        run: eas build --platform android --profile development --non-interactive
+        run: eas build --platform android --profile develop --non-interactive
 
       - name: Build for iOS
-        run: eas build --platform ios --profile development --non-interactive
+        run: eas build --platform ios --profile develop --non-interactive
 
       - name: Deploy Update
-        run: eas update --channel development --message "Automated update from GitHub Actions" --non-interactive 
+        run: eas update --channel develop --message "Automated update from GitHub Actions" --non-interactive 
