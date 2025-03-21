@@ -43,10 +43,16 @@ jobs:
         run: npm ci
 
       - name: Build for Android
+        env:
+          EXPO_TOKEN: ${{ secrets.EAS_TOKEN }}
         run: eas build --platform android --profile develop --non-interactive
 
       - name: Build for iOS
+        env:
+          EXPO_TOKEN: ${{ secrets.EAS_TOKEN }}
         run: eas build --platform ios --profile develop --non-interactive
 
       - name: Deploy Update
+        env:
+          EXPO_TOKEN: ${{ secrets.EAS_TOKEN }}
         run: eas update --channel develop --message "Automated update from GitHub Actions" --non-interactive 
