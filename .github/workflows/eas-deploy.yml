@@ -33,15 +33,14 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EAS_TOKEN }}
+
       - name: Install dependencies
         run: npm ci
-
-      - name: Install EAS CLI
-        run: npm install -g eas-cli
-
-      - name: Configure EAS
-        run: |
-          eas login --non-interactive --token ${{ secrets.EAS_TOKEN }}
 
       - name: Build for Android
         run: eas build --platform android --profile develop --non-interactive
