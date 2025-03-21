@@ -17,6 +17,14 @@ on:
           - develop
           - preview
           - production
+      should_build:
+        description: 'Should we build the app?'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - true
+          - false
 
 jobs:
   build:
@@ -47,9 +55,11 @@ jobs:
         run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
 
       - name: Build for Android
+        if: ${{ inputs.should_build == 'true' }}
         run: eas build --platform android --profile ${{ steps.branch.outputs.branch }} --non-interactive
 
       - name: Build for iOS
+        if: ${{ inputs.should_build == 'true' }}
         run: eas build --platform ios --profile ${{ steps.branch.outputs.branch }} --non-interactive
 
       - name: Deploy Update
