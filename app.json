@@ -29,7 +29,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "organization": "eyethena",
     "runtimeVersion": {
       "policy": "appVersion"
     },
