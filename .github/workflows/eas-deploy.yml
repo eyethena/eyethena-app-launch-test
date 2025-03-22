@@ -1,0 +1,66 @@
+name: EAS Build and Deploy
+
+# This workflow builds and deploys the app using EAS
+on:
+  push:
+    branches: [ main, develop, 'feature/**' ]
+  pull_request:
+    branches: [ main, develop, 'feature/**' ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'develop'
+        type: choice
+        options:
+          - develop
+          - preview
+          - production
+      should_build:
+        description: 'Should we build the app?'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - true
+          - false
+
+jobs:
+  build:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EAS_TOKEN }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get branch name
+        id: branch
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+
+      - name: Build for Android
+        if: ${{ inputs.should_build == 'true' }}
+        run: eas build --platform android --profile ${{ steps.branch.outputs.branch }} --non-interactive
+
+      - name: Build for iOS
+        if: ${{ inputs.should_build == 'true' }}
+        run: eas build --platform ios --profile ${{ steps.branch.outputs.branch }} --non-interactive
+
+      - name: Deploy Update
+        run: eas update --channel ${{ steps.branch.outputs.branch }} --message "Automated update from GitHub Actions" --non-interactive 
