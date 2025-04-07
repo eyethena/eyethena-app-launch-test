@@ -16,25 +16,13 @@ interface Styles {
 }
 
 export default function App(): JSX.Element {
-  const handlePress = async (): Promise<void> => {
-    const phoneNumber: string = '917-605-5448';
+  const handlePress = async (status: 'start' | 'error'): Promise<void> => {
+    const url: string = `eyethena-app://sync?status=${status}`;
     
-    if (Platform.OS === 'ios') {
-      try {
-        const facetimeUrl: string = `facetime://${phoneNumber}`;
-        const supported: boolean = await Linking.canOpenURL(facetimeUrl);
-        
-        if (supported) {
-          await Linking.openURL(facetimeUrl);
-        } else {
-          Alert.alert('Error', 'FaceTime is not available on this device');
-        }
-      } catch (error) {
-        Alert.alert('Error', 'Could not open FaceTime');
-      }
-    } else {
-      // Android stub
-      Alert.alert('Android', 'Video call functionality coming soon for Android!');
+    try {
+      await Linking.openURL(url);
+    } catch (error) {
+      Alert.alert('Error', 'Could not open Eyethena app. Please make sure it is installed.');
     }
   };
 
@@ -42,9 +30,14 @@ export default function App(): JSX.Element {
     <View style={styles.container}>
       <Text style={styles.text}>Welcome to my Expo app!</Text>
       <Button
-        title="Start Video Call"
-        onPress={handlePress}
+        title="Launch Eyethena (Start)"
+        onPress={() => handlePress('start')}
         color="#841584"
+      />
+      <Button
+        title="Launch Eyethena (Error)"
+        onPress={() => handlePress('error')}
+        color="#ff0000"
       />
       <StatusBar style="auto" />
     </View>
