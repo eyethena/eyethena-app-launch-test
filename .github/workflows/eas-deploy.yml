@@ -2,8 +2,6 @@ name: EAS Build and Deploy
 
 # This workflow builds and deploys the app using EAS
 on:
-  push:
-    branches: [ main, develop, 'feature/**' ]
   pull_request:
     branches: [ main, develop, 'feature/**' ]
   workflow_dispatch:
