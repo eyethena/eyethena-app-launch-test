@@ -16,7 +16,7 @@ interface Styles {
 }
 
 export default function App(): JSX.Element {
-  const handlePress = async (status: 'start' | 'error'): Promise<void> => {
+  const handleEyethenaPress = async (status: 'start' | 'error'): Promise<void> => {
     const url: string = `eyethena-app://sync?status=${status}`;
     
     try {
@@ -26,18 +26,40 @@ export default function App(): JSX.Element {
     }
   };
 
+  const handleICarePress = async (): Promise<void> => {
+    const url: string = Platform.select({
+      ios: 'icare-app://',
+      android: 'intent://#Intent;' +
+        'package=com.icarefinland.patient2.us.internal;' +
+        'action=com.icarefinland.patient2.action.AUTO_SYNC;' +
+        'end',
+      default: 'icare-app://'
+    }) as string;
+    
+    try {
+      await Linking.openURL(url);
+    } catch (error) {
+      Alert.alert('Error', 'Could not open iCare app. Please make sure it is installed.');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Welcome to my Expo app!</Text>
       <Button
         title="Launch Eyethena (Start)"
-        onPress={() => handlePress('start')}
+        onPress={() => handleEyethenaPress('start')}
         color="#841584"
       />
       <Button
         title="Launch Eyethena (Error)"
-        onPress={() => handlePress('error')}
+        onPress={() => handleEyethenaPress('error')}
         color="#ff0000"
+      />
+      <Button
+        title="Launch iCare"
+        onPress={handleICarePress}
+        color="#0066cc"
       />
       <StatusBar style="auto" />
     </View>
