@@ -7,4 +7,5 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && apt update \
     && apt install gh -y
 
-RUN npm install -g expo-cli eas-cli
+# Install global tools
+RUN npm install -g expo-cli@latest eas-cli@latest
