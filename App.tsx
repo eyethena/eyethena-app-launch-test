@@ -15,13 +15,22 @@ interface Styles {
   };
 }
 
+interface ErrorDetails {
+  name: string;
+  message: string;
+  stack?: string;
+}
+
 export default function App(): JSX.Element {
   const handleEyethenaPress = async (status: 'start' | 'error'): Promise<void> => {
     const url: string = `eyethena-app://sync?status=${status}`;
+    console.log('Attempting to launch Eyethena:', { url, platform: Platform.OS, version: Platform.Version });
     
     try {
       await Linking.openURL(url);
+      console.log('Successfully opened Eyethena app');
     } catch (error) {
+      console.error('Error launching Eyethena:', { error, url, platform: Platform.OS, version: Platform.Version });
       Alert.alert('Error', 'Could not open Eyethena app. Please make sure it is installed.');
     }
   };
@@ -36,9 +45,13 @@ export default function App(): JSX.Element {
       default: 'icare-app://'
     }) as string;
     
+    console.log('Attempting to launch iCare:', { url, platform: Platform.OS, version: Platform.Version });
+    
     try {
       await Linking.openURL(url);
+      console.log('Successfully opened iCare app');
     } catch (error) {
+      console.error('Error launching iCare:', { error, url, platform: Platform.OS, version: Platform.Version });
       Alert.alert('Error', 'Could not open iCare app. Please make sure it is installed.');
     }
   };
