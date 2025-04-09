@@ -1,5 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, Alert, Platform, Linking } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, Platform } from 'react-native';
+import * as Linking from 'expo-linking';
+import * as IntentLauncher from 'expo-intent-launcher';
 
 interface Styles {
   container: {
@@ -16,9 +18,8 @@ interface Styles {
 }
 
 interface ErrorDetails {
-  name: string;
   message: string;
-  stack?: string;
+  code?: string;
 }
 
 export default function App(): JSX.Element {
@@ -36,23 +37,34 @@ export default function App(): JSX.Element {
   };
 
   const handleICarePress = async (): Promise<void> => {
-    const url: string = Platform.select({
-      ios: 'icare-app://',
-      android: 'intent://#Intent;' +
-        'package=com.icarefinland.patient2.us.internal;' +
-        'action=com.icarefinland.patient2.action.AUTO_SYNC;' +
-        'end',
-      default: 'icare-app://'
-    }) as string;
+    console.log('Attempting to launch iCare:', { platform: Platform.OS, version: Platform.Version });
     
-    console.log('Attempting to launch iCare:', { url, platform: Platform.OS, version: Platform.Version });
-    
-    try {
-      await Linking.openURL(url);
-      console.log('Successfully opened iCare app');
-    } catch (error) {
-      console.error('Error launching iCare:', { error, url, platform: Platform.OS, version: Platform.Version });
-      Alert.alert('Error', 'Could not open iCare app. Please make sure it is installed.');
+    if (Platform.OS === 'android') {
+      try {
+        console.log('Starting activity with:', {
+          action: 'com.icarefinland.patient2.action.AUTO_SYNC',
+          packageName: 'com.icarefinland.patient2.us.internal'
+        });
+        
+        await IntentLauncher.startActivityAsync('com.icarefinland.patient2.action.AUTO_SYNC', {
+          packageName: 'com.icarefinland.patient2.us.internal'
+        });
+        console.log('Successfully opened iCare app');
+      } catch (error: unknown) {
+        const typedError = error as ErrorDetails;
+        console.error('Error launching iCare:', { 
+          error,
+          errorMessage: typedError.message,
+          errorCode: typedError.code,
+          errorDetails: error,
+          platform: Platform.OS, 
+          version: Platform.Version 
+        });
+        Alert.alert('Error', 'Could not open iCare app. Please make sure it is installed.');
+      }
+    } else {
+      console.warn('This functionality is only available on Android devices');
+      Alert.alert('Error', 'This functionality is only available on Android devices');
     }
   };
 
