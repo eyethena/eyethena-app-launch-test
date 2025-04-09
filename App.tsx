@@ -23,7 +23,7 @@ interface ErrorDetails {
 }
 
 export default function App(): JSX.Element {
-  const handleEyethenaPress = async (status: 'start' | 'error'): Promise<void> => {
+  const handleEyethenaPress = async (status: 'success' | 'error'): Promise<void> => {
     const url: string = `eyethena-app://sync?status=${status}`;
     console.log('Attempting to launch Eyethena:', { url, platform: Platform.OS, version: Platform.Version });
     
@@ -73,7 +73,7 @@ export default function App(): JSX.Element {
       <Text style={styles.text}>Welcome to my Expo app!</Text>
       <Button
         title="Launch Eyethena (Start)"
-        onPress={() => handleEyethenaPress('start')}
+        onPress={() => handleEyethenaPress('success')}
         color="#841584"
       />
       <Button
